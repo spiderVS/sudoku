@@ -25,10 +25,30 @@ module.exports = function solveSudoku(matrix) {
 
     for (let i = squareRow; i < squareRow + 3; i++) {
       for (let j = squareCol; j < squareCol + 3; j++) {
-        if ((matrix[i][j] == num) && (i != row) && (i != col)) return false;
+        if ((matrix[i][j] == number) && (i != row) && (j != col)) return false;
       }
     }
+    return true;
   }
 
+  function solve() {
+    let currentPosition = findZero(matrix);
+    if (currentPosition == null) return true;
 
+    for (let number = 1; number <= 9; number++) {
+      if (checkNumber(number, currentPosition, matrix)) {
+        let [r, c] = currentPosition;
+        matrix[r][c] = number;
+
+        if (solve()) return true;
+
+        matrix[r][c] = 0;
+      }
+    }
+
+    return false;
+  }
+
+  solve();
+  return matrix;
 }
